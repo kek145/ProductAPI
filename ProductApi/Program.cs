@@ -3,6 +3,7 @@ using MediatR;
 using Product.DAL.Data;
 using Product.Domain.Responses;
 using System.Collections.Generic;
+using FluentValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +16,8 @@ using Product.BLL.Commands.ProductCommands.Create;
 using Product.BLL.Commands.ProductCommands.Delete;
 using Product.BLL.Commands.ProductCommands.Update;
 using Product.BLL.Queries.ProductQueries.GetAllProducts;
+using Product.BLL.Validators.Product;
+using Product.Domain.Requests;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,6 +33,8 @@ builder.Services.AddTransient<IRequestHandler<DeleteProductCommand>, DeleteProdu
 builder.Services.AddTransient<IRequestHandler<CreateProductCommand, int>, CreateProductCommandHandler>();
 builder.Services.AddTransient<IRequestHandler<GetProductByIdQuery, ProductResponse>, GetProductByIdQueryHandler>();
 builder.Services.AddTransient<IRequestHandler<GetAllProductsQuery, IEnumerable<ProductResponse>>, GetAllProductsQueryHandler>();
+
+builder.Services.AddTransient<IValidator<ProductRequest>, ProductRequestValidator>();
 
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
