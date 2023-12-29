@@ -6,5 +6,7 @@ public class ApplicationDbContext : DbContext
 {
     public DbSet<Domain.DbSet.Product> Products { get; set; } = null!;
 
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
+    {
+    }
 }

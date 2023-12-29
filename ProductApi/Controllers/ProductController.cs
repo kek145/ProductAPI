@@ -1,5 +1,7 @@
 ﻿using System.Threading.Tasks;
+using Product.Domain.Requests;
 using Microsoft.AspNetCore.Mvc;
+using Product.BLL.Services.ProductService;
 
 namespace ProductApi.Controllers;
 
@@ -7,31 +9,41 @@ namespace ProductApi.Controllers;
 [Route("api/products")]
 public class ProductController : ControllerBase
 {
+    private readonly IProductService _productService;
+
+    public ProductController(IProductService productService)
+    {
+        _productService = productService;
+    }
 
     [HttpPost]
     [Route("create")]
-    public async Task<IActionResult> CreateProduct()
+    public async Task<IActionResult> CreateProduct([FromBody] ProductRequest request)
     {
-        return Ok();
+        var response = await _productService.CreateProductAsync(request);
+        return CreatedAtAction(nameof(GetProductById), new { productId = response}, new { productId = response });
     }
 
     [HttpGet]
     public async Task<IActionResult> GetAllProducts()
     {
-        return Ok();
+        var response = await _productService.GetAllProductsAsync();
+        return Ok(response);
     }
 
     [HttpGet]
     [Route("{productId:int}")]
     public async Task<IActionResult> GetProductById(int productId)
     {
-        return Ok();
+        var response = await _productService.GetProductByIdAsync(productId);
+        return Ok(response);
     }
 
     [HttpPut]
     [Route("{productId:int}/update")]
-    public async Task<IActionResult> UpdateProduct(int productId)
+    public async Task<IActionResult> UpdateProduct(int productId, [FromBody] ProductRequest request)
     {
+        await _productService.UpdateProductAsync(productId, request);
         return NoContent();
     }
 
@@ -39,6 +51,7 @@ public class ProductController : ControllerBase
     [Route("{productId:int}/delete")]
     public async Task<IActionResult> DeleteProduct(int productId)
     {
+        await _productService.DeleteProductAsync(productId);
         return NoContent();
     }
 }
