@@ -10,6 +10,7 @@ using Product.BLL.Commands.ProductCommands.Create;
 using Product.BLL.Commands.ProductCommands.Delete;
 using Product.BLL.Commands.ProductCommands.Update;
 using Product.BLL.Queries.ProductQueries.GetAllProducts;
+using Product.Domain.Helpers;
 
 namespace Product.BLL.Services.ProductService;
 
@@ -38,14 +39,15 @@ public class ProductService : IProductService
         return createCommand;
     }
 
-    public async Task<IEnumerable<ProductResponse>> GetAllProductsAsync()
+    public async Task<PagedResult<ProductResponse>> GetAllProductsAsync(QueryParameters queryParameters)
     {
-        var query = new GetAllProductsQuery();
+        var query = new GetAllProductsQuery(queryParameters);
 
-        var getAllQuery = await _mediator.Send(query);
+        var send = await _mediator.Send(query);
 
-        return getAllQuery;
+        return send;
     }
+
 
     public async Task<ProductResponse> GetProductByIdAsync(int productId)
     {

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper.QueryableExtensions;
+using Product.Domain.Helpers;
 
 namespace Product.DAL.Repositories.ProductRepository;
 
@@ -82,5 +83,25 @@ public class ProductRepository : IProductRepository
         var result = _mapper.Map<IEnumerable<ProductDto>>(products);
 
         return result;
+    }
+
+    public async Task<PagedResult<ProductDto>> GetAllProductAsync<TResult>(QueryParameters queryParameters)
+    {
+        var totalSize = await _context.Products.CountAsync();
+        var items = await _context.Products.Skip(queryParameters.StartIndex)
+            .AsSplitQuery()
+            .AsNoTracking()
+            .Take(queryParameters.PageSize)
+            .ProjectTo<ProductDto>(_mapper.ConfigurationProvider)
+            .ToListAsync();
+
+
+        return new PagedResult<ProductDto>
+        {
+            Items = items,
+            PageNumber = queryParameters.PageNumber,
+            RecordNumber = queryParameters.PageSize,
+            TotalCount = totalSize
+        };
     }
 }

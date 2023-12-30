@@ -2,6 +2,7 @@
 using Product.Domain.Requests;
 using Microsoft.AspNetCore.Mvc;
 using Product.BLL.Services.ProductService;
+using Product.Domain.Helpers;
 
 namespace ProductApi.Controllers;
 
@@ -25,9 +26,9 @@ public class ProductController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAllProducts()
+    public async Task<IActionResult> GetAllProducts([FromQuery] QueryParameters parameters)
     {
-        var response = await _productService.GetAllProductsAsync();
+        var response = await _productService.GetAllProductsAsync(parameters);
         return Ok(response);
     }
 

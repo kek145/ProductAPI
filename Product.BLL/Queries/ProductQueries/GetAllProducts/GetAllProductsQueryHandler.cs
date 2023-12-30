@@ -1,14 +1,15 @@
-﻿using MediatR;
+﻿using System.Collections.Generic;
+using MediatR;
 using AutoMapper;
 using System.Threading;
 using System.Threading.Tasks;
+using Product.Domain.Helpers;
 using Product.Domain.Responses;
-using System.Collections.Generic;
 using Product.DAL.Repositories.ProductRepository;
 
 namespace Product.BLL.Queries.ProductQueries.GetAllProducts;
 
-public class GetAllProductsQueryHandler : IRequestHandler<GetAllProductsQuery, IEnumerable<ProductResponse>>
+public class GetAllProductsQueryHandler : IRequestHandler<GetAllProductsQuery, PagedResult<ProductResponse>>
 {
     private readonly IMapper _mapper;
     private readonly IProductRepository _productRepository;
@@ -18,11 +19,11 @@ public class GetAllProductsQueryHandler : IRequestHandler<GetAllProductsQuery, I
         _mapper = mapper;
         _productRepository = productRepository;
     }
-    public async Task<IEnumerable<ProductResponse>> Handle(GetAllProductsQuery request, CancellationToken cancellationToken)
+    public async Task<PagedResult<ProductResponse>> Handle(GetAllProductsQuery request, CancellationToken cancellationToken)
     {
-        var products = await _productRepository.GetAllProductsAsync();
+        var products = await _productRepository.GetAllProductAsync<PagedResult<ProductResponse>>(request.QueryParameters);
 
-        var result = _mapper.Map<IEnumerable<ProductResponse>>(products);
+        var result = _mapper.Map<PagedResult<ProductResponse>>(products);
 
         return result;
     }

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Product.Domain.DTOs;
+using Product.Domain.Helpers;
 using Product.Domain.Requests;
 using Product.Domain.Responses;
 
@@ -29,5 +30,8 @@ public class ProductMappingProfile : Profile
                 opt => opt.MapFrom(src => src.Description))
             .ForMember(dest => dest.Price,
                 opt => opt.MapFrom(src => src.Price));
+        
+        CreateMap<PagedResult<ProductDto>, PagedResult<ProductResponse>>()
+            .ForMember(dest => dest.Items, opt => opt.MapFrom(src => src.Items)); // Укажите свойство Items, если оно отличается
     }
 }
