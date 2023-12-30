@@ -2,15 +2,14 @@
 using MediatR;
 using FluentValidation;
 using System.Threading.Tasks;
+using Product.Domain.Helpers;
 using Product.Domain.Requests;
 using Product.Domain.Responses;
-using System.Collections.Generic;
 using Product.BLL.Queries.ProductQueries.GetById;
 using Product.BLL.Commands.ProductCommands.Create;
 using Product.BLL.Commands.ProductCommands.Delete;
 using Product.BLL.Commands.ProductCommands.Update;
 using Product.BLL.Queries.ProductQueries.GetAllProducts;
-using Product.Domain.Helpers;
 
 namespace Product.BLL.Services.ProductService;
 

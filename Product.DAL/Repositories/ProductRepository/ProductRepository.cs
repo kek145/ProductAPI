@@ -87,8 +87,18 @@ public class ProductRepository : IProductRepository
 
     public async Task<PagedResult<ProductDto>> GetAllProductAsync<TResult>(QueryParameters queryParameters)
     {
+        if (queryParameters.PageNumber < 1)
+        {
+            queryParameters.PageNumber = 1;
+        }
+        
         var totalSize = await _context.Products.CountAsync();
-        var items = await _context.Products.Skip(queryParameters.StartIndex)
+        
+        var startIndex = (queryParameters.PageNumber - 1) * queryParameters.PageSize;
+        
+        var totalPages = (int)Math.Ceiling((double)totalSize / queryParameters.PageSize);
+        
+        var items = await _context.Products.Skip(startIndex)
             .AsSplitQuery()
             .AsNoTracking()
             .Take(queryParameters.PageSize)
@@ -101,7 +111,8 @@ public class ProductRepository : IProductRepository
             Items = items,
             PageNumber = queryParameters.PageNumber,
             RecordNumber = queryParameters.PageSize,
-            TotalCount = totalSize
+            TotalCount = totalSize,
+            TotalPages = totalPages
         };
     }
 }
