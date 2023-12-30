@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
+using Product.Domain.Helpers;
 using Product.Domain.Requests;
 using Microsoft.AspNetCore.Mvc;
 using Product.BLL.Services.ProductService;
-using Product.Domain.Helpers;
 
 namespace ProductApi.Controllers;
 
