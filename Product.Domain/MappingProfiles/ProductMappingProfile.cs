@@ -32,6 +32,6 @@ public class ProductMappingProfile : Profile
                 opt => opt.MapFrom(src => src.Price));
         
         CreateMap<PagedResult<ProductDto>, PagedResult<ProductResponse>>()
-            .ForMember(dest => dest.Items, opt => opt.MapFrom(src => src.Items)); // Укажите свойство Items, если оно отличается
+            .ForMember(dest => dest.Items, opt => opt.MapFrom(src => src.Items));
     }
 }
